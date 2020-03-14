@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.softuni.productshop.domain.models.binding.ProductBindingModel;
 import org.softuni.productshop.domain.models.service.ProductServiceModel;
 import org.softuni.productshop.domain.models.view.ProductViewModel;
+import org.softuni.productshop.service.CloudinaryService;
 import org.softuni.productshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,11 +21,13 @@ import java.util.stream.Collectors;
 public class ProductController extends BaseController {
 
     private final ProductService productService;
+    private final CloudinaryService cloudinaryService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProductController(ProductService productService, ModelMapper modelMapper) {
+    public ProductController(ProductService productService, CloudinaryService cloudinaryService, ModelMapper modelMapper) {
         this.productService = productService;
+        this.cloudinaryService = cloudinaryService;
         this.modelMapper = modelMapper;
     }
 
@@ -35,9 +39,9 @@ public class ProductController extends BaseController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ModelAndView addProductConfirm(@ModelAttribute ProductBindingModel model) {
+    public ModelAndView addProductConfirm(@ModelAttribute ProductBindingModel model) throws IOException {
         ProductServiceModel productServiceModel = this.modelMapper.map(model, ProductServiceModel.class);
-        productServiceModel.setImageUrl("www.imageTODO.com");
+        productServiceModel.setImageUrl(this.cloudinaryService.uploadImage(model.getImage()));
 
         this.productService.addProduct(productServiceModel);
 
