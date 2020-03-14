@@ -1,7 +1,6 @@
 package org.softuni.productshop.web.controllers;
 
 import org.modelmapper.ModelMapper;
-import org.softuni.productshop.domain.Category;
 import org.softuni.productshop.domain.models.binding.CategoryBindingModel;
 import org.softuni.productshop.domain.models.service.CategoryServiceModel;
 import org.softuni.productshop.domain.models.view.CategoryViewModel;
@@ -89,5 +88,15 @@ public class CategoryController extends BaseController {
         this.categoryService.deleteCategory(id);
 
         return super.redirect("/categories/all");
+    }
+
+    @GetMapping("/fetch")
+    @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    @ResponseBody
+    public List<CategoryViewModel> fetchCategories() {
+        return this.categoryService.findAllCategories()
+                .stream()
+                .map(c -> this.modelMapper.map(c, CategoryViewModel.class))
+                .collect(Collectors.toList());
     }
 }

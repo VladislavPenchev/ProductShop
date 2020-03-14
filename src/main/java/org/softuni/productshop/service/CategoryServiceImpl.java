@@ -1,7 +1,7 @@
 package org.softuni.productshop.service;
 
 import org.modelmapper.ModelMapper;
-import org.softuni.productshop.domain.Category;
+import org.softuni.productshop.domain.entities.Category;
 import org.softuni.productshop.domain.models.service.CategoryServiceModel;
 import org.softuni.productshop.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +62,13 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = this.categoryRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         this.categoryRepository.delete(category);
+    }
+
+    @Override
+    public List<CategoryServiceModel> findAllCategories() {
+        return this.categoryRepository.findAll()
+                .stream()
+                .map(c -> this.modelMapper.map(c, CategoryServiceModel.class))
+                .collect(Collectors.toList());
     }
 }

@@ -1,4 +1,4 @@
-package org.softuni.productshop.domain;
+package org.softuni.productshop.domain.entities;
 
 import org.softuni.productshop.domain.entities.BaseEntity;
 

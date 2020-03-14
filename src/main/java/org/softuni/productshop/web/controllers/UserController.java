@@ -3,9 +3,8 @@ package org.softuni.productshop.web.controllers;
 import org.modelmapper.ModelMapper;
 import org.softuni.productshop.domain.models.binding.UserProfileBindingModel;
 import org.softuni.productshop.domain.models.binding.UserRegisterBindingModel;
-import org.softuni.productshop.domain.models.service.RoleServiceModel;
 import org.softuni.productshop.domain.models.service.UserServiceModel;
-import org.softuni.productshop.domain.models.view.AllUsersViewModel;
+import org.softuni.productshop.domain.models.view.UsersViewModel;
 import org.softuni.productshop.domain.models.view.EditProfileViewModel;
 import org.softuni.productshop.domain.models.view.ProfileViewModel;
 import org.softuni.productshop.service.UserService;
@@ -98,10 +97,10 @@ public class UserController extends BaseController {
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView allUsers(ModelAndView modelAndView) {
-        List<AllUsersViewModel> users = this.userService.allUsers()
+        List<UsersViewModel> users = this.userService.allUsers()
                 .stream()
                 .map(u -> {
-                    AllUsersViewModel user = this.modelMapper.map(u, AllUsersViewModel.class);
+                    UsersViewModel user = this.modelMapper.map(u, UsersViewModel.class);
                     user.setAuthorities(u.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.toSet()));
 
                     return user;

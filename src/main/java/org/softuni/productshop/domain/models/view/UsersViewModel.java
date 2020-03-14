@@ -4,7 +4,7 @@ import org.softuni.productshop.domain.models.service.RoleServiceModel;
 
 import java.util.Set;
 
-public class AllUsersViewModel {
+public class UsersViewModel {
     private String id;
     private String username;
     private String email;
